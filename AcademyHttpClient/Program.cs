@@ -35,11 +35,18 @@ namespace AcademyHttpClient
         {
             foreach(Student student in students)
             {
-                Console.WriteLine($"Firstname: {student.Firstname}\n" +
-                    $"Lastname: {student.Lastname}\nEmail: {student.Email}");
+                string isEmployee;
+                if (student.IsEmployee) isEmployee = "Yes";
+                else isEmployee = "No";
+                Console.WriteLine($"Id:{student.Id}\nFirstname: {student.Firstname}\n" +
+                    $"Lastname: {student.Lastname}\nDate of Birth: {student.DateOfBirth}\n" +
+                    $"Address: {student.Address}\nCity: {student.City}\n" +
+                    $"Email: {student.Email}\nPhone number: {student.PhoneNumber}\n" +
+                    $"Is Employee? --> {isEmployee}\n");
             }
         }
 
+        #region Async Methods
         static async Task<List<Student>> GetStudentsAsync(string path)
         {
             List<Student> s = new List<Student>();
@@ -49,7 +56,19 @@ namespace AcademyHttpClient
                 s = await response.Content.ReadAsAsync<List<Student>>();
             }
 
-            return s;
+            if (s.Any()) return s;
+            return null;
+        }
+
+        private static async Task<Student> GetStudentByFullnameAsync(string fullnamePath)
+        {
+            HttpResponseMessage response = await client.GetAsync(fullnamePath);
+            if (response.IsSuccessStatusCode)
+            {
+                var students =  await response.Content.ReadAsAsync<List<Student>>();
+                if (students.Any()) return students.First();
+            }
+            return null;
         }
 
         static async Task<long> CreateStudentAsync(string url)
@@ -68,7 +87,7 @@ namespace AcademyHttpClient
             string date;
             do
             {
-                Console.Write("\n\tDate of birth (yyyy/MM/dd) --> ");
+                Console.Write("\tDate of birth (yyyy/MM/dd) --> ");
                 date = Console.ReadLine();
                 if (date.Split('/').Length == 3)
                 {
@@ -84,15 +103,15 @@ namespace AcademyHttpClient
 
             } while (true);
 
-            Console.Write("\n\tAddress --> ");
+            Console.Write("\tAddress --> ");
             created.Address = Console.ReadLine();
 
-            Console.Write("\n\tCity --> ");
+            Console.Write("\tCity --> ");
             created.City = Console.ReadLine();
 
             do
             {
-                Console.Write("\n\tEmail --> ");
+                Console.Write("\tEmail --> ");
                 string email = Console.ReadLine();
                 if (IsValidEmail(email))
                 {
@@ -104,7 +123,7 @@ namespace AcademyHttpClient
 
             do
             {
-                Console.Write("\n\tPhone number --> ");
+                Console.Write("\tPhone number --> ");
                 string pn = Console.ReadLine();
                 if (pn.Length == 10)
                 {
@@ -122,7 +141,7 @@ namespace AcademyHttpClient
 
             do
             {
-                Console.Write("\n\tIs Employee? (y/n) --> ");
+                Console.Write("\tIs Employee? (y/n) --> ");
                 string ans = Console.ReadLine();
                 char c;
                 if (IsValidChar(ans, out c))
@@ -143,11 +162,83 @@ namespace AcademyHttpClient
             return createdId.First().Id;
         }
 
+        static async Task<Student> UpdateStudentAsync(string baseAddress)
+        {
+            #region old
+            //string urlToUpdate;
+            //string fullname;
+            //do
+            //{
+            //    Console.Write("Insert firstname and lastname of the student you want to update (separe them with a blank space) --> ");
+            //    fullname = Console.ReadLine();
+
+            //    if (fullname.Split(' ').Length == 2)
+            //    {
+            //        string formattedFullname = string.Join("%20", fullname.Split(' '));
+            //        urlToUpdate = $"{baseAddress}name?fullname={formattedFullname}";
+            //        break;
+            //    }
+            //    else Console.WriteLine($"The string you gave as input is {fullname.Split(' ').Length} words long! Please insert a 2 words long string!");
+            //} while (true);
+
+            //List<Student> studentList = await GetStudentsAsync(urlToUpdate);
+            //if (studentList.Any() && studentList.Count == 1)
+            //{
+            //    string firstname = studentList.First().Firstname;
+            //    string lastname = studentList.First().Lastname;
+            //    Student student = StudentInput(firstname, lastname);
+            //    HttpResponseMessage response = await client.PutAsJsonAsync(baseAddress, student);
+            //    response.EnsureSuccessStatusCode();
+            //    var updated = await response.Content.ReadAsAsync<Student>();
+            //    return updated.Firstname + " " + updated.Lastname;
+            //}
+
+            //Console.WriteLine($"DB error: there are more than one student named {fullname}! There were {studentList.Count} students.");
+            //return null;
+            #endregion
+
+            string fullname, findByNameUrl;
+            Student oldStudent, newStudent;
+            HttpResponseMessage response;
+
+
+            do
+                {
+                    Console.Write("Insert firstname and lastname of the student you want to update (separe them with a blank space) --> ");
+                    fullname = Console.ReadLine();
+
+                    if (fullname.Split(' ').Length == 2)
+                    {
+                        string formattedFullname = string.Join("%20", fullname.Split(' '));
+                        findByNameUrl = $"{baseAddress}name?fullname={formattedFullname}";
+                        break;
+                    }
+                    else Console.WriteLine($"The string you gave as input is {fullname.Split(' ').Length} words long! Please insert a 2 words long string!");
+                } while (true);
+            oldStudent = await GetStudentByFullnameAsync(findByNameUrl);
+            Console.WriteLine((await DeleteStudentAsync(oldStudent.Id, baseAddress)).ToString());
+
+            newStudent = StudentInput();
+            response = await client.PostAsJsonAsync(baseAddress, newStudent);
+            response.EnsureSuccessStatusCode();
+
+            newStudent = await response.Content.ReadAsAsync<Student>();
+            return newStudent;
+        }
+
+        static async Task<HttpStatusCode> DeleteStudentAsync(long id, string baseAddress)
+        {
+            HttpResponseMessage response = await client.DeleteAsync($"{baseAddress}{id}");
+            return response.StatusCode;
+        }
+        #endregion
+
         static void Main()
         {
             RunAsync().Wait();
         }
 
+        #region Main Async Method
         static async Task RunAsync()
         {
             client.BaseAddress = new Uri("https://localhost:44331/api/");
@@ -163,24 +254,39 @@ namespace AcademyHttpClient
                     "\n\t--> 1 - List every student;" +
                     "\n\t--> 2 - Create new student;" +
                     "\n\t--> 3 - Update student;" +
-                    "\n\t--> 4 - Delete student;" +
-                    "\n\t--> 5 - Run automatic snippet;\n\t--> ");
+                    "\n\t--> 4 - Delete student;\n\t--> ");
                 choice = Console.ReadLine();
                 switch (choice)
                 {
                     case "0":
                         Console.WriteLine("Console will close shortly...");
-                        System.Threading.Thread.Sleep(3000);
+                        System.Threading.Thread.Sleep(1500);
                         break;
                     case "1":
                         Console.WriteLine($"URL --> {client.BaseAddress.ToString() + "student/name"}\n");
                         ShowStudents(await GetStudentsAsync(client.BaseAddress.ToString() + "student/name"));
                         break;
                     case "2":
+                        long createdId = await CreateStudentAsync(client.BaseAddress.ToString() + "student");
                         Console.WriteLine("Creating new student...");
                         System.Threading.Thread.Sleep(1500);
-                        long createdId = await CreateStudentAsync(client.BaseAddress.ToString() + "student");
                         Console.WriteLine($"Student succesfully created with ID number {createdId}");
+                        break;
+                    case "3":
+                        Student student = await UpdateStudentAsync($"{client.BaseAddress}student/");
+                        Console.WriteLine("Updating student...");
+                        System.Threading.Thread.Sleep(1500);
+                        Console.WriteLine($"Student updated successfully! New ID number is {student.Id}.");
+                        break;
+                    case "4":
+                        Console.Write("Insert the ID of the student you want to delete --> ");
+                        long idToDelete = long.Parse(Console.ReadLine());
+                        Console.WriteLine("Deleting student...");
+                        System.Threading.Thread.Sleep(1500);
+                        await DeleteStudentAsync(idToDelete, $"{client.BaseAddress}student/");
+                        break;
+                    default:
+                        Console.WriteLine("Invalid value detected!");
                         break;
                 }
 
@@ -192,6 +298,90 @@ namespace AcademyHttpClient
                 }
             }while (choice != "0");
             
+        }
+        #endregion
+
+        private static Student StudentInput()
+        {
+            Student created = new Student();
+
+            Console.Write("Input Student obj fields:" +
+                "\n\tFirstname --> ");
+            created.Firstname = Console.ReadLine();
+
+            Console.Write("\tLastname --> ");
+            created.Lastname = Console.ReadLine();
+
+            string date;
+            do
+            {
+                Console.Write("\tDate of birth (yyyy/MM/dd) --> ");
+                date = Console.ReadLine();
+                if (date.Split('/').Length == 3)
+                {
+                    if (date.Split('/')[0].Length == 4
+                        && date.Split('/')[1].Length == 2
+                        && date.Split('/')[2].Length == 2)
+                    {
+                        created.DateOfBirth = date;
+                        break;
+                    }
+                }
+                else Console.Write("\n\tWrong pattern detected! Please insert following yyyy/MM/dd pattern");
+
+            } while (true);
+
+            Console.Write("\tAddress --> ");
+            created.Address = Console.ReadLine();
+
+            Console.Write("\tCity --> ");
+            created.City = Console.ReadLine();
+
+            do
+            {
+                Console.Write("\tEmail --> ");
+                string email = Console.ReadLine();
+                if (IsValidEmail(email))
+                {
+                    created.Email = email;
+                    break;
+                }
+                else Console.Write("\n\tWrong email pattern detected! Please try again!");
+            } while (true);
+
+            do
+            {
+                Console.Write("\tPhone number --> ");
+                string pn = Console.ReadLine();
+                if (pn.Length == 10)
+                {
+                    var isNumeric = long.TryParse(pn, out _);
+                    if (isNumeric)
+                    {
+                        created.PhoneNumber = pn;
+                        break;
+                    }
+                    else Console.WriteLine("\n\tPhone number must be parsable into an integer value! Please try again!");
+                }
+                else Console.WriteLine("\n\tPhone number must be 10 chars long! Please try again!");
+
+            } while (true);
+
+            do
+            {
+                Console.Write("\tIs Employee? (y/n) --> ");
+                string ans = Console.ReadLine();
+                char c;
+                if (IsValidChar(ans, out c))
+                {
+                    if (c == 'y') created.IsEmployee = true;
+                    else created.IsEmployee = false;
+                    break;
+                }
+                else Console.WriteLine("\n\tInvalid answer detected! Please insert y/Y [yes] or n/N [no]");
+            } while (true);
+
+            return created;
         }
 
         #region CreateStudent checks
