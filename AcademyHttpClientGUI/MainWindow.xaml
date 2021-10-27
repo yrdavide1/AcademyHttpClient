@@ -8,7 +8,7 @@
         Title="Test" Height="500" Width="900">
     <Grid>
         <Button Content="Display" HorizontalAlignment="Left" Margin="16,20,0,0" VerticalAlignment="Top" Height="29" Width="108" Click="Display_Students"/>
-        <TextBox Name="Message" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="215" Height="280" Margin="16,54,0,0" Visibility="Hidden"/>
+        <TextBox Name="Message" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="215" Height="312" Margin="16,54,0,0" Visibility="Hidden"/>
         <Button Content="Create" HorizontalAlignment="Left" Margin="614,337,0,0" VerticalAlignment="Top" Height="29" Width="108" Click="Create_Student"/>
         <TextBox x:Name="FirstnameInput" HorizontalAlignment="Left" Margin="658,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170"/>
         <TextBox x:Name="LastnameInput" HorizontalAlignment="Left" Margin="658,98,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170"/>
