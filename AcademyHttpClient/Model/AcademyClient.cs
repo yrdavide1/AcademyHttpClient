@@ -12,7 +12,21 @@ namespace AcademyHttpClient
 {
     public class AcademyClient
     {
-        static HttpClient client = new HttpClient();
+        private static HttpClient client = new HttpClient();
+        static void ShowStudents(List<Student> students)
+        {
+            foreach (Student student in students)
+            {
+                string isEmployee;
+                if (student.IsEmployee) isEmployee = "Yes";
+                else isEmployee = "No";
+                Console.WriteLine($"Id:{student.Id}\nFirstname: {student.Firstname}\n" +
+                    $"Lastname: {student.Lastname}\nDate of Birth: {student.DateOfBirth}\n" +
+                    $"Address: {student.Address}\nCity: {student.City}\n" +
+                    $"Email: {student.Email}\nPhone number: {student.PhoneNumber}\n" +
+                    $"Is Employee? --> {isEmployee}\n");
+            }
+        }
 
         #region Async Methods
         static async Task<List<Student>> GetStudentsAsync(string path)
@@ -199,21 +213,6 @@ namespace AcademyHttpClient
             return response.StatusCode;
         }
         #endregion
-
-        static void ShowStudents(List<Student> students)
-        {
-            foreach (Student student in students)
-            {
-                string isEmployee;
-                if (student.IsEmployee) isEmployee = "Yes";
-                else isEmployee = "No";
-                Console.WriteLine($"Id:{student.Id}\nFirstname: {student.Firstname}\n" +
-                    $"Lastname: {student.Lastname}\nDate of Birth: {student.DateOfBirth}\n" +
-                    $"Address: {student.Address}\nCity: {student.City}\n" +
-                    $"Email: {student.Email}\nPhone number: {student.PhoneNumber}\n" +
-                    $"Is Employee? --> {isEmployee}\n");
-            }
-        }
 
         #region Main Async Method
         public static async Task RunAsync()

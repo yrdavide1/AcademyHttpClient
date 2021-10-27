@@ -7,18 +7,7 @@
         mc:Ignorable="d"
         Title="Test" Height="450" Width="800">
     <Grid>
-        <TextBlock HorizontalAlignment="Center" Margin="0,94,0,0" TextWrapping="Wrap" Text="Choose one of the two radio buttons below" VerticalAlignment="Top" Height="24" Width="260"/>
-        <RadioButton x:Name="HelloButton" Content="Hello" HorizontalAlignment="Left" Margin="236,179,0,0" VerticalAlignment="Top" Height="24" Width="63"/>
-        <RadioButton x:Name="GoodbyeButton" Content="Goodbye" HorizontalAlignment="Left" Margin="467,179,0,0" VerticalAlignment="Top" Height="24" Width="77"/>
-        <Button Content="Display" HorizontalAlignment="Left" Margin="348,265,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.17,0.158" Width="78" Click="Button_Click" Height="28">
-            <Button.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="0.152"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Button.RenderTransform>
-        </Button>
+        <Button Content="Display" HorizontalAlignment="Left" Margin="16,20,0,0" VerticalAlignment="Top" Height="29" Width="108" Click="Display_Students"/>
+        <TextBox Name="Message" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="215" Height="280" Margin="16,54,0,0" Visibility="Visible"/>
     </Grid>
 </Window>
