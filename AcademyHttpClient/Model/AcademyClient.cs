@@ -60,10 +60,10 @@ namespace AcademyHttpClient
             Student created = new Student();
 
             Console.Write("Input Student obj fields:" +
-                "\n\tFirstname --> ");
+                "\tFirstname --> ");
             created.Firstname = Console.ReadLine();
 
-            Console.Write("\n\tLastname --> ");
+            Console.Write("\tLastname --> ");
             created.Lastname = Console.ReadLine();
 
             string date;
