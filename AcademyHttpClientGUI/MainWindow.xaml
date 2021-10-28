@@ -8,22 +8,6 @@
         Title="Test" Height="500" Width="900">
     <Grid>
         <Button Content="Display" HorizontalAlignment="Left" Margin="16,20,0,0" VerticalAlignment="Top" Height="29" Width="108" Click="Display_Students"/>
-        <TextBox Name="Message" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="215" Height="312" Margin="16,54,0,0" Visibility="Hidden"/>
-        <Button Content="Create" HorizontalAlignment="Left" Margin="614,337,0,0" VerticalAlignment="Top" Height="29" Width="108" Click="Create_Student"/>
-        <TextBox x:Name="FirstnameInput" HorizontalAlignment="Left" Margin="658,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170"/>
-        <TextBox x:Name="LastnameInput" HorizontalAlignment="Left" Margin="658,98,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170"/>
-        <TextBox x:Name="DateOfBirthInput" HorizontalAlignment="Left" Margin="658,131,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170"/>
-        <TextBox x:Name="AddressInput" HorizontalAlignment="Left" Margin="658,163,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170"/>
-        <TextBox x:Name="CityInput" HorizontalAlignment="Left" Margin="658,194,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170"/>
-        <TextBox x:Name="EmailInput" HorizontalAlignment="Left" Margin="658,225,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170"/>
-        <TextBox x:Name="PhoneNumberInput" HorizontalAlignment="Left" Margin="658,258,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170"/>
-        <CheckBox x:Name="IsEmployeeInput" Content="Is employee?" HorizontalAlignment="Left" Margin="658,289,0,0" VerticalAlignment="Top"/>
-        <Label Content="Firstname" HorizontalAlignment="Left" Margin="570,60,0,0" VerticalAlignment="Top" Height="30"/>
-        <Label Content="Lastname" HorizontalAlignment="Left" Margin="570,94,0,0" VerticalAlignment="Top"/>
-        <Label Content="Date of birth" HorizontalAlignment="Left" Margin="570,125,0,0" VerticalAlignment="Top"/>
-        <Label Content="Address" HorizontalAlignment="Left" Margin="570,159,0,0" VerticalAlignment="Top"/>
-        <Label Content="City" HorizontalAlignment="Left" Margin="570,190,0,0" VerticalAlignment="Top"/>
-        <Label Content="Email" HorizontalAlignment="Left" Margin="570,221,0,0" VerticalAlignment="Top"/>
-        <Label Content="Phone number" HorizontalAlignment="Left" Margin="570,254,0,0" VerticalAlignment="Top"/>
+        <Button Content="Create" HorizontalAlignment="Left" Margin="163,20,0,0" VerticalAlignment="Top" Height="29" Width="108" Click="Create_Student"/>
     </Grid>
 </Window>
