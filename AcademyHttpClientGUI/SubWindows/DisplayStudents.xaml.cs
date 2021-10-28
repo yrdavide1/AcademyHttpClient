@@ -29,39 +29,44 @@ namespace AcademyHttpClientGUI.SubWindows
         private async void Onload()
         {
             Message.Text = "";
-            Message.Visibility = Visibility.Hidden;
-            System.Threading.Thread.Sleep(500);
-
-            List<Student> students = new List<Student>();
-            using (HttpClient client = new HttpClient())
+            try
             {
-                HttpResponseMessage response = await client.GetAsync("https://localhost:44331/api/student/name");
-                response.EnsureSuccessStatusCode();
-                if (response.IsSuccessStatusCode)
+                List<Student> students = new List<Student>();
+                using (HttpClient client = new HttpClient())
                 {
-                    students = await response.Content.ReadAsAsync<List<Student>>();
-                    if (students.Any())
+                    HttpResponseMessage response = await client.GetAsync("https://localhost:44331/api/student/name");
+                    response.EnsureSuccessStatusCode();
+                    if (response.IsSuccessStatusCode)
                     {
-                        Message.Visibility = Visibility.Visible;
-                        foreach (Student student in students)
+                        students = await response.Content.ReadAsAsync<List<Student>>();
+                        if (students.Any())
                         {
-                            Message.Text += $"Id: {student.Id}\nFirstname: {student.Firstname}\n" +
-                                                $"Lastname: {student.Lastname}\nDate of Birth: {student.DateOfBirth}\n" +
-                                                $"Address: {student.Address}\nCity: {student.City}\n" +
-                                                $"Email: {student.Email}\nPhone number: {student.PhoneNumber}\n" +
-                                                $"Is Employee: {student.IsEmployee}\n" +
-                                                $"--------------\n";
-                            //MessageBox.Show($"Id: {student.Id}\nFirstname: {student.Firstname}\n" +
-                            //                    $"Lastname: {student.Lastname}\nDate of Birth: {student.DateOfBirth}\n" +
-                            //                    $"Address: {student.Address}\nCity: {student.City}\n" +
-                            //                    $"Email: {student.Email}\nPhone number: {student.PhoneNumber}\n");
+                            Message.Visibility = Visibility.Visible;
+                            foreach (Student student in students)
+                            {
+                                Message.Text += $"Id: {student.Id}\nFirstname: {student.Firstname}\n" +
+                                                    $"Lastname: {student.Lastname}\nDate of Birth: {student.DateOfBirth}\n" +
+                                                    $"Address: {student.Address}\nCity: {student.City}\n" +
+                                                    $"Email: {student.Email}\nPhone number: {student.PhoneNumber}\n" +
+                                                    $"Is Employee: {student.IsEmployee}\n" +
+                                                    $"--------------\n";
+                                //MessageBox.Show($"Id: {student.Id}\nFirstname: {student.Firstname}\n" +
+                                //                    $"Lastname: {student.Lastname}\nDate of Birth: {student.DateOfBirth}\n" +
+                                //                    $"Address: {student.Address}\nCity: {student.City}\n" +
+                                //                    $"Email: {student.Email}\nPhone number: {student.PhoneNumber}\n");
+                            }
                         }
                     }
+                    else
+                    {
+                        Message.Text = $"Server error code {response.StatusCode}";
+                    }
                 }
-                else
-                {
-                    Message.Text = $"Server error code {response.StatusCode}";
-                }
+            }
+            catch (Exception ex)
+            {
+                Close();
+                MessageBox.Show(ex.Message, ex.Source);
             }
         }
     }

@@ -7,7 +7,6 @@
         mc:Ignorable="d"
         Title="DisplayStudents" Height="520" Width="400">
     <Grid>
-        <TextBox x:Name="Message" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="380" Height="479" BorderThickness="0"/>
-
+        <TextBlock x:Name="Message" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Height="484" Width="380"/>
     </Grid>
 </Window>

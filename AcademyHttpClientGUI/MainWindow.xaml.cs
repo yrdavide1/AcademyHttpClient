@@ -55,6 +55,17 @@ namespace AcademyHttpClientGUI
             CreateStudent createStudent = new CreateStudent();
             createStudent.Show();
         }
+
+        private void Delete_Student(object sender, RoutedEventArgs e)
+        {
+            DeleteStudent deleteStudent = new DeleteStudent();
+            deleteStudent.Show();
+        }
+
+        private void Exit(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 
 }

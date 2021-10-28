@@ -65,7 +65,7 @@ namespace AcademyHttpClientGUI.SubWindows
             }
         }
 
-        #region CreateStudent checks
+        #region Validate
         private static bool IsValidPhoneNumber(string pn)
         {
             if (pn.Length == 10)
