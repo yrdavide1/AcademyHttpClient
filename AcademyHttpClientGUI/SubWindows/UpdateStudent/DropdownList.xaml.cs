@@ -70,9 +70,38 @@ namespace AcademyHttpClientGUI.SubWindows.UpdateStudent
             return students;
         }
 
-        private void Confirm(object sender, RoutedEventArgs e)
+        private async void Confirm(object sender, RoutedEventArgs e)
         {
+            Student studentToUpdate = await GetStudentByIdAsync($"https://localhost:44331/api/student/{IDs.SelectedItem}");
+            long idToUpdate = studentToUpdate.Id;
+            string? propToUpdate = Fields.SelectedItem.ToString();
 
+            if(propToUpdate != null) PropInputLabel.Text += $"{studentToUpdate.GetType().GetProperty(propToUpdate)}";
+            
+
+        }
+
+        private static async Task<Student> GetStudentByIdAsync(string fullnamePath)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                Student student = new Student();
+                HttpResponseMessage response = await client.GetAsync(fullnamePath);
+                student = await response.Content.ReadAsAsync<Student>();
+                response.EnsureSuccessStatusCode();
+
+                return student;
+            }
+        }
+
+        private void FieldChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!FieldsDefaultItem.IsSelected)
+            {
+                PropInput.Visibility = Visibility.Visible;
+                PropInputLabel.Visibility = Visibility.Visible;
+                PropInputLabel.Text = $"{Fields.SelectedItem} value ";
+            }
         }
     }
 }

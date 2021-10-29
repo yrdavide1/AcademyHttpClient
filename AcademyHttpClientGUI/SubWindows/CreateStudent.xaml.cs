@@ -59,7 +59,11 @@ namespace AcademyHttpClientGUI.SubWindows
                     if (response.IsSuccessStatusCode)
                     {
                         List<Student> created = await response.Content.ReadAsAsync<List<Student>>();
-                        if (created.Any()) MessageBox.Show($"Student successfully created with ID {created.First().Id}");
+                        if (created.Any())
+                        {
+                            MessageBox.Show($"Student successfully created with ID {created.First().Id}");
+                            Close();
+                        }
                     }
                 }
             }
