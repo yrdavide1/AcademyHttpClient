@@ -28,9 +28,16 @@
                 </Style>
             </Button.Resources>
         </Button>
-        <Button Content="Close" HorizontalAlignment="Left" Margin="452,217,0,0" VerticalAlignment="Top" Height="27" Width="68" Click="Exit">
+        <Button Content="Close" HorizontalAlignment="Left" Margin="434,214,0,0" VerticalAlignment="Top" Height="27" Width="68" Click="Exit">
             <Button.Resources>
                 <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <Button Content="Update" HorizontalAlignment="Left" Margin="394,20,0,0" VerticalAlignment="Top" Height="29" Width="108" Click="Update_Student">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="5"/>
                 </Style>
             </Button.Resources>

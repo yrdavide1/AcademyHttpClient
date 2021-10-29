@@ -1,0 +1,26 @@
+﻿<Window x:Class="AcademyHttpClientGUI.SubWindows.UpdateStudent.DropdownList"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AcademyHttpClientGUI.SubWindows.UpdateStudent"
+        mc:Ignorable="d"
+        Title="DropdownList" Height="200" Width="400">
+    <Grid>
+        <ComboBox x:Name="IDs" HorizontalAlignment="Left" Margin="32,65,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBoxItem IsSelected="True">IDs</ComboBoxItem>
+        </ComboBox>
+        <ComboBox x:Name="Fields" HorizontalAlignment="Left" Margin="250,65,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBoxItem IsSelected="True">FIELDS</ComboBoxItem>
+        </ComboBox>
+        <TextBlock HorizontalAlignment="Center" Margin="0,29,0,0" TextWrapping="Wrap" Text="Select ID and field" VerticalAlignment="Top"/>
+        <Button x:Name="ConfirmBtn" Content="Confirm" HorizontalAlignment="Left" Margin="298,123,0,0" VerticalAlignment="Top" Height="28" Width="79" Click="Confirm">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+    </Grid>
+</Window>

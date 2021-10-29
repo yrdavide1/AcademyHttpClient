@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using AcademyHttpClientGUI.SubWindows;
+using AcademyHttpClientGUI.SubWindows.UpdateStudent;
 
 namespace AcademyHttpClientGUI
 {
@@ -65,6 +66,12 @@ namespace AcademyHttpClientGUI
         private void Exit(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void Update_Student(object sender, RoutedEventArgs e)
+        {
+            DropdownList studentDropdownList = new DropdownList();
+            studentDropdownList.Show();
         }
     }
 
