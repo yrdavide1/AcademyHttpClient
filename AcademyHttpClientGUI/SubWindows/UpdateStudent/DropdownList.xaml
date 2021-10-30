@@ -5,16 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AcademyHttpClientGUI.SubWindows.UpdateStudent"
         mc:Ignorable="d"
-        Title="DropdownList" Height="300" Width="400">
+        Title="DropdownList" Height="300" Width="500">
     <Grid>
         <ComboBox x:Name="IDs" HorizontalAlignment="Left" Margin="32,65,0,0" VerticalAlignment="Top" Width="120">
-            <ComboBoxItem IsSelected="True">IDs</ComboBoxItem>
+            <ComboBoxItem x:Name="IDsDefaultItem" IsSelected="True">IDs</ComboBoxItem>
         </ComboBox>
         <ComboBox x:Name="Fields" SelectionChanged="FieldChanged" HorizontalAlignment="Left" Margin="32,129,0,0" VerticalAlignment="Top" Width="120">
             <ComboBoxItem x:Name="FieldsDefaultItem" IsSelected="True">FIELDS</ComboBoxItem>
         </ComboBox>
-        <TextBlock HorizontalAlignment="Center" Margin="0,29,0,0" TextWrapping="Wrap" Text="Select ID and field" VerticalAlignment="Top"/>
-        <Button x:Name="ConfirmBtn" Content="Confirm" HorizontalAlignment="Left" Margin="291,210,0,0" VerticalAlignment="Top" Height="28" Width="79" Click="Confirm">
+        <TextBlock HorizontalAlignment="Left" Margin="169,18,0,0" TextWrapping="Wrap" Text="Select ID and field" VerticalAlignment="Top" Height="22" Width="125" FontSize="15"/>
+        <Button x:Name="ConfirmBtn" Content="Confirm" HorizontalAlignment="Left" Margin="375,219,0,0" VerticalAlignment="Top" Height="28" Width="79" Click="Confirm">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="5"/>
@@ -23,7 +23,8 @@
         </Button>
         <TextBox x:Name="PropInput" Visibility="Hidden" HorizontalAlignment="Left" Margin="32,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBlock x:Name="PropInputLabel" Visibility="Hidden" HorizontalAlignment="Left" Margin="32,182,0,0" Text="Property value" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <CheckBox x:Name="IsEmployeeCheckBox" Visibility="Hidden" HorizontalAlignment="Left" Margin="32,210,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="IsEmployeeCheckBox" Visibility="Hidden" HorizontalAlignment="Left" Margin="32,203,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="CurrentValue" HorizontalAlignment="Left" Margin="232,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Visibility="Hidden"/>
 
     </Grid>
 </Window>

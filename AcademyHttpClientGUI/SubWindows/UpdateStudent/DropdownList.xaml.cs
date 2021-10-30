@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using AcademyHttpClientGUI.SubWindows;
 
 namespace AcademyHttpClientGUI.SubWindows.UpdateStudent
 {
@@ -43,25 +44,23 @@ namespace AcademyHttpClientGUI.SubWindows.UpdateStudent
                 {
                     foreach (var p in s.GetType().GetProperties())
                     {
-                        Fields.Items.Add(p.Name);
+                        if (p.Name != "Id") Fields.Items.Add(p.Name);
                         x = true;
                     }
                 }
             }
         }
 
-        private async Task<List<Student>> GetStudents()
+        private static async Task<List<Student>> GetStudents()
         {
-            List<Student> students = new List<Student>();
+            List<Student> students = new();
             try
             {
-                using (HttpClient client = new HttpClient())
-                {
-                    var response = await client.GetAsync("https://localhost:44331/api/student/name");
-                    response.EnsureSuccessStatusCode();
+                using HttpClient client = new();
+                var response = await client.GetAsync("https://localhost:44331/api/student/name");
+                response.EnsureSuccessStatusCode();
 
-                    students = await response.Content.ReadAsAsync<List<Student>>();
-                }
+                students = await response.Content.ReadAsAsync<List<Student>>();
             }
             catch (Exception ex)
             {
@@ -72,36 +71,69 @@ namespace AcademyHttpClientGUI.SubWindows.UpdateStudent
 
         private async void Confirm(object sender, RoutedEventArgs e)
         {
-            Student studentToUpdate = await GetStudentByIdAsync($"https://localhost:44331/api/student/{IDs.SelectedItem}");
-            long idToUpdate = studentToUpdate.Id;
+            Student oldStudent = await GetStudentByIdAsync($"https://localhost:44331/api/student/{IDs.SelectedItem}");
+            Student newStudent = new();
+            long idToUpdate = oldStudent.Id;
             string? propToUpdate = Fields.SelectedItem.ToString();
+            HttpResponseMessage response = new();
 
-            if(propToUpdate != null) PropInputLabel.Text += $"{studentToUpdate.GetType().GetProperty(propToUpdate)}";
-            
+            if (propToUpdate == "IsEmployee") oldStudent.IsEmployee = IsEmployeeCheckBox.IsChecked;
+            else oldStudent.GetType().GetProperty(propToUpdate).SetValue(oldStudent, PropInput.Text);
 
+            using HttpClient client = new();
+            response = await client.DeleteAsync($"https://localhost:44331/api/student/{idToUpdate}");
+            response.EnsureSuccessStatusCode();
+
+            foreach (var p in oldStudent.GetType().GetProperties())
+            {
+                if (p.Name != "Id") newStudent.GetType().GetProperty(p.Name).SetValue(newStudent, p.GetValue(oldStudent));
+            }
+
+            response = await client.PostAsJsonAsync("https://localhost:44331/api/student", newStudent);
+            response.EnsureSuccessStatusCode();
+            newStudent = await response.Content.ReadAsAsync<Student>();
+
+            MessageBox.Show($"{propToUpdate} successfully updated, new ID is {newStudent.Id}");
+            Close();
         }
 
         private static async Task<Student> GetStudentByIdAsync(string fullnamePath)
         {
-            using (HttpClient client = new HttpClient())
-            {
-                Student student = new Student();
-                HttpResponseMessage response = await client.GetAsync(fullnamePath);
-                student = await response.Content.ReadAsAsync<Student>();
-                response.EnsureSuccessStatusCode();
+            using HttpClient client = new();
+            Student student = new();
+            HttpResponseMessage response = await client.GetAsync(fullnamePath);
+            student = await response.Content.ReadAsAsync<Student>();
+            response.EnsureSuccessStatusCode();
 
-                return student;
-            }
+            return student;
         }
 
-        private void FieldChanged(object sender, SelectionChangedEventArgs e)
+        private async void FieldChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!FieldsDefaultItem.IsSelected)
             {
-                PropInput.Visibility = Visibility.Visible;
                 PropInputLabel.Visibility = Visibility.Visible;
-                PropInputLabel.Text = $"{Fields.SelectedItem} value ";
+                PropInputLabel.Text = $"{Fields.SelectedItem} value";
+
+                if (Fields.SelectedItem.ToString() == "IsEmployee")
+                {
+                    IsEmployeeCheckBox.Visibility = Visibility.Visible;
+                    PropInput.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    PropInput.Visibility = Visibility.Visible;
+                    IsEmployeeCheckBox.Visibility = Visibility.Hidden;
+                }
+            }
+
+            if (!IDsDefaultItem.IsSelected && !FieldsDefaultItem.IsSelected)
+            {
+                var s = await GetStudentByIdAsync($"https://localhost:44331/api/student/{IDs.SelectedItem}");
+                CurrentValue.Visibility = Visibility.Visible;
+                CurrentValue.Text = $"Current {Fields.SelectedItem} value {s.GetType().GetProperty(Fields.SelectedItem.ToString()).GetValue(s)}";
             }
         }
+
     }
 }
