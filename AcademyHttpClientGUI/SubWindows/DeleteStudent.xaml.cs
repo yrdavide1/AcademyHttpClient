@@ -32,16 +32,14 @@ namespace AcademyHttpClientGUI.SubWindows
 
             if(studentId != -1)
             {
-                using (HttpClient client = new HttpClient())
-                {
-                    HttpResponseMessage response = await client.DeleteAsync($"https://localhost:44331/api/student/{studentId}");
-                    response.EnsureSuccessStatusCode();
+                using HttpClient client = new HttpClient();
+                HttpResponseMessage response = await client.DeleteAsync($"https://localhost:44331/api/student/{studentId}");
+                response.EnsureSuccessStatusCode();
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        MessageBox.Show($"Student with ID {studentId} successfully deleted!");
-                        Close();
-                    }
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show($"Student with ID {studentId} successfully deleted!");
+                    Close();
                 }
             }
         }
