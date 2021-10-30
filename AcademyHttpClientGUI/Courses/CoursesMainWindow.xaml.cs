@@ -58,10 +58,6 @@ namespace AcademyHttpClientGUI.Courses
             windowsObjs.Add(new Modify());
         }
 
-        private void Confirm(object sender, RoutedEventArgs e)
-        {
-        }
-
         private void ActionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!Default.IsSelected)
