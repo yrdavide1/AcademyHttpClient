@@ -16,7 +16,7 @@
         <ComboBox x:Name="LevelList" HorizontalAlignment="Left" Margin="263,397,0,0" VerticalAlignment="Top" Width="125"/>
         <ComboBox x:Name="AreaIds" HorizontalAlignment="Left" Margin="263,431,0,0" VerticalAlignment="Top" Width="125"/>
         <CheckBox x:Name="GrantsCertification" Content="Grants Certification?" HorizontalAlignment="Left" Margin="263,470,0,0" VerticalAlignment="Top"/>
-        <DatePicker x:Name="CreationDate" HorizontalAlignment="Left" Margin="263,503,0,0" VerticalAlignment="Top" Width="146"/>
+        <DatePicker x:Name="CreationDate" HorizontalAlignment="Left" Margin="263,503,0,0" VerticalAlignment="Top" Width="146" SelectedDateFormat="Short"/>
         <Label Content="Title" HorizontalAlignment="Left" Margin="97,74,0,0" VerticalAlignment="Top"/>
         <Label Content="Description" HorizontalAlignment="Left" Margin="97,116,0,0" VerticalAlignment="Top"/>
         <Label Content="Duration (in hours)" HorizontalAlignment="Left" Margin="97,200,0,0" VerticalAlignment="Top"/>

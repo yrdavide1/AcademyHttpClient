@@ -35,7 +35,6 @@ namespace AcademyHttpClientGUI.Courses
         public string? Syllabus { get; set; }
         public int Level { get; set; }
         public long AreaId { get; set; }
-        public string? AreaName { get; set; }
         public bool GrantsCertification { get; set; }
         public string? CreationDate { get; set; }
     }

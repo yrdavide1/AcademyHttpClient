@@ -28,9 +28,10 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
             Onload();
         }
 
-        private void Confirm(object sender, RoutedEventArgs e)
+        private async void Confirm(object sender, RoutedEventArgs e)
         {
             Course course = new();
+            course.Id = 0;
             course.Title = Title.Text;
             course.Description = Description.Text;
 
@@ -39,8 +40,25 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
             if(int.TryParse(Price.Text, out int price)) course.BasePrice = price;
 
             course.Syllabus = Syllabus.Text;
-            //course.Level =
-            course.AreaId = long.Parse(AreaIds.SelectedItem.GetType().Name);
+            course.Level = LevelList.SelectedIndex;
+            course.AreaId = AreaIds.SelectedIndex + 1;
+
+            if (GrantsCertification.IsChecked != null) course.GrantsCertification = (bool)GrantsCertification.IsChecked;
+
+            course.CreationDate = FormatDate(CreationDate.Text); //dd-MM-yyyy
+
+            MessageBox.Show((course.AreaId + 1).ToString());
+
+            using HttpClient client = new();
+            HttpResponseMessage response = await client.PostAsJsonAsync("https://localhost:44331/api/course/", course);
+            response.EnsureSuccessStatusCode();
+
+            response = await client.GetAsync($"https://localhost:44331/api/course/area/{course.AreaId}");
+            response.EnsureSuccessStatusCode();
+            //long createdId = (await response.Content.ReadAsAsync<List<Course>>()).First().Id;
+
+            MessageBox.Show($"Course successfully created");
+            Close();
         }
 
         private async void Onload()
@@ -65,6 +83,19 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
             {
                 LevelList.Items.Add(value);
             }
+        }
+
+        private string FormatDate(string date)
+        {
+            string[] x = date.Split('/');
+            string[] formattedDate =
+            {
+                x[2],
+                x[1],
+                x[0]
+            };
+
+            return string.Join('-', formattedDate);
         }
     }
 }

@@ -40,14 +40,14 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
                 courses = await response.Content.ReadAsAsync<List<Course>>();
                 if (courses.Any())
                 {
-                    foreach(Course c in courses)
+                    for(int i = 0; i < courses.Count; i++)
                     {
-                        foreach(var p in c.GetType().GetProperties())
+                        foreach(var p in courses[i].GetType().GetProperties())
                         {
                             if (p.Name != "AreaName")
                             {
-                                if (p.Name == "BasePrice") DisplayText.Text += $"{p.Name}: {p.GetValue(c)}$\n";
-                                else DisplayText.Text += $"{p.Name}: {p.GetValue(c)}\n";
+                                if (p.Name == "BasePrice") DisplayText.Text += $"{p.Name}: {p.GetValue(courses[i])}$\n";
+                                else DisplayText.Text += $"{p.Name}: {p.GetValue(courses[i])}\n";
                             }
                         }
                         DisplayText.Text += "-------------\n";
