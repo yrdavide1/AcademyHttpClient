@@ -44,8 +44,11 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
                     {
                         foreach(var p in c.GetType().GetProperties())
                         {
-                            if (p.Name != "AreaName") DisplayText.Text += $"{p.Name}: {p.GetValue(c)}\n";
-                            if (p.Name == "BasePrice") DisplayText.Text += $"{p.Name}: {p.GetValue(c)}$\n";
+                            if (p.Name != "AreaName")
+                            {
+                                if (p.Name == "BasePrice") DisplayText.Text += $"{p.Name}: {p.GetValue(c)}$\n";
+                                else DisplayText.Text += $"{p.Name}: {p.GetValue(c)}\n";
+                            }
                         }
                         DisplayText.Text += "-------------\n";
                     }
