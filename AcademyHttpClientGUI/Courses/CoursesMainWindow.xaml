@@ -5,16 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AcademyHttpClientGUI.Courses"
         mc:Ignorable="d"
-        Title="CoursesMainWindow" Height="250" Width="300">
+        Title="CoursesMainWindow" Height="200" Width="300">
     <Grid>
-        <ComboBox x:Name="CoursesActions" SelectionChanged="ActionChanged" HorizontalAlignment="Center" Margin="0,101,0,0" VerticalAlignment="Top" Width="170">
+        <ComboBox x:Name="CoursesActions" SelectionChanged="ActionChanged" HorizontalAlignment="Center" Margin="0,95,0,0" VerticalAlignment="Top" Width="170">
             <ComboBoxItem x:Name="Default" IsSelected="True">ACTIONS</ComboBoxItem>
             <ComboBoxItem Tag="Display">Display active courses</ComboBoxItem>
             <ComboBoxItem Tag="Create">Create new course</ComboBoxItem>
             <ComboBoxItem Tag="Delete">Delete a course</ComboBoxItem>
             <ComboBoxItem Tag="Modify">Modify course properties</ComboBoxItem>
         </ComboBox>
-        <TextBlock FontSize="15" HorizontalAlignment="Center" Margin="0,64,0,0" Text="Choose action to perform" TextWrapping="Wrap" VerticalAlignment="Top" Width="170"/>
+        <TextBlock FontSize="15" HorizontalAlignment="Center" Margin="0,42,0,0" Text="Choose action to perform" TextWrapping="Wrap" VerticalAlignment="Top" Width="170"/>
 
     </Grid>
 </Window>
