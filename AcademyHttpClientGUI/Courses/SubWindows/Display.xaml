@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AcademyHttpClientGUI.Courses.SubWindows"
         mc:Ignorable="d"
-        Title="Display" Height="400" Width="400">
+        Title="Display" Height="520" Width="420">
     <Grid>
-        <TextBlock x:Name="DisplayText" HorizontalAlignment="Left" Margin="19,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="343" Width="357"/>
+        <ScrollViewer>
+            <TextBlock x:Name="DisplayText" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="0,10,0,0"/>
+        </ScrollViewer>
     </Grid>
 </Window>

@@ -30,35 +30,44 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
 
         private async void Confirm(object sender, RoutedEventArgs e)
         {
-            Course course = new();
-            course.Id = 0;
-            course.Title = Title.Text;
-            course.Description = Description.Text;
+            try
+            {
+                Course course = new();
+                course.Id = 0;
+                course.Title = Title.Text;
+                course.Description = Description.Text;
 
-            if (int.TryParse(Title.Text, out int duration)) course.Duration = duration;
-            
-            if(int.TryParse(Price.Text, out int price)) course.BasePrice = price;
+                if (int.TryParse(Title.Text, out int duration)) course.Duration = duration;
 
-            course.Syllabus = Syllabus.Text;
-            course.Level = LevelList.SelectedIndex;
-            course.AreaId = AreaIds.SelectedIndex + 1;
+                if (int.TryParse(Price.Text, out int price)) course.BasePrice = price;
 
-            if (GrantsCertification.IsChecked != null) course.GrantsCertification = (bool)GrantsCertification.IsChecked;
+                course.Syllabus = Syllabus.Text;
+                course.Level = LevelList.SelectedIndex;
+                course.AreaId = AreaIds.SelectedIndex + 1;
 
-            course.CreationDate = FormatDate(CreationDate.Text); //dd-MM-yyyy
+                if (GrantsCertification.IsChecked != null) course.GrantsCertification = (bool)GrantsCertification.IsChecked;
 
-            MessageBox.Show((course.AreaId + 1).ToString());
+                course.CreationDate = FormatDate(CreationDate.Text); //dd-MM-yyyy
 
-            using HttpClient client = new();
-            HttpResponseMessage response = await client.PostAsJsonAsync("https://localhost:44331/api/course/", course);
-            response.EnsureSuccessStatusCode();
+                MessageBox.Show((course.AreaId + 1).ToString());
 
-            response = await client.GetAsync($"https://localhost:44331/api/course/area/{course.AreaId}");
-            response.EnsureSuccessStatusCode();
-            //long createdId = (await response.Content.ReadAsAsync<List<Course>>()).First().Id;
+                using HttpClient client = new();
+                HttpResponseMessage response = await client.PostAsJsonAsync("https://localhost:44331/api/course/", course);
+                response.EnsureSuccessStatusCode();
 
-            MessageBox.Show($"Course successfully created");
-            Close();
+                response = await client.GetAsync($"https://localhost:44331/api/course/area/{course.AreaId}");
+                response.EnsureSuccessStatusCode();
+                //long createdId = (await response.Content.ReadAsAsync<List<Course>>()).First().Id;
+
+                MessageBox.Show($"Course successfully created");
+                Close();
+            }
+            catch (Exception ex)
+            {
+                Close();
+                MessageBox.Show(ex.Message, ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
         }
 
         private async void Onload()
@@ -71,7 +80,7 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
             areas = await response.Content.ReadAsAsync<List<Area>>();
             areas.ForEach(e => AreaIds.Items.Add(e.Id));
 
-            Dictionary<long, string> levels = new Dictionary<long, string>
+            Dictionary<long, string> levels = new()
             {
                 { 0, "BEGINNER" },
                 { 1, "INTERMEDIATE"},
