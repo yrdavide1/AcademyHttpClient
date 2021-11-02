@@ -42,7 +42,14 @@
                 </Style>
             </Button.Resources>
         </Button>
-        <Button Content="Courses" HorizontalAlignment="Center" VerticalAlignment="Center" Height="29" Width="108" Click="Courses">
+        <Button Content="Courses" HorizontalAlignment="Left" VerticalAlignment="Center" Height="29" Width="108" Click="Courses" Margin="142,0,0,0">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <Button Content="Instructors" HorizontalAlignment="Left" VerticalAlignment="Center" Height="29" Width="108" Click="Instructors" Margin="269,0,0,0">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="5"/>

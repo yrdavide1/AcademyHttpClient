@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using AcademyHttpClientGUI.SubWindows;
 using AcademyHttpClientGUI.SubWindows.UpdateStudent;
 using AcademyHttpClientGUI.Courses;
+using AcademyHttpClientGUI.Instructors;
 
 namespace AcademyHttpClientGUI
 {
@@ -79,6 +80,12 @@ namespace AcademyHttpClientGUI
         {
             CoursesMainWindow coursesMainWindow = new();
             coursesMainWindow.Show();
+        }
+
+        private void Instructors(object sender, RoutedEventArgs e)
+        {
+            InstructorMainWindow instructorMainWindow = new();
+            instructorMainWindow.Show();
         }
     }
 

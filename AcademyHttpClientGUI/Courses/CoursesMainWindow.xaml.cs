@@ -45,17 +45,7 @@ namespace AcademyHttpClientGUI.Courses
     /// 
     public partial class CoursesMainWindow : Window
     {
-        List<object> windowsObjs = new();
-        string? windowToShow;
-
-        public CoursesMainWindow()
-        {
-            InitializeComponent();
-            windowsObjs.Add(new Display());
-            windowsObjs.Add(new Create());
-            windowsObjs.Add(new Delete());
-            windowsObjs.Add(new Modify());
-        }
+        public CoursesMainWindow() => InitializeComponent();
 
         private void ActionChanged(object sender, SelectionChangedEventArgs e)
         {
