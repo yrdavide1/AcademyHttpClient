@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,6 +23,23 @@ namespace AcademyHttpClientGUI.Instructors.SubWindows
         public Display()
         {
             InitializeComponent();
+        }
+
+        private static async Task<List<Instructor>> GetInstructors()
+        {
+            List<Instructor> instructors = new();
+            using HttpClient client = new();
+            HttpResponseMessage response = await client.GetAsync("https://localhost:44331/api/instructor");
+            response.EnsureSuccessStatusCode();
+            instructors = await response.Content.ReadAsAsync<List<Instructor>>();
+
+            if(instructors.Any()) return instructors;
+            return null;
+        }
+
+        private async void Onload()
+        {
+
         }
     }
 }

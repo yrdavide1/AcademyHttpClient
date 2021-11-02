@@ -14,7 +14,7 @@ using System.Windows.Shapes;
 
 namespace AcademyHttpClientGUI.Instructors
 {
-    public class Instrcutor : Person
+    public class Instructor : Person
     {
         public bool? IsContractor { get; set; }
         public decimal PayRate { get; set; }
