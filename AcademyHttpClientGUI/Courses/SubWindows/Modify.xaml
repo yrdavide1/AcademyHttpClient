@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AcademyHttpClientGUI.Courses.SubWindows"
         mc:Ignorable="d"
-        Title="Modify" Height="330" Width="400">
+        Title="Modify" Height="400" Width="400">
     <Grid>
         <StackPanel x:Name="Container"/>
     </Grid>

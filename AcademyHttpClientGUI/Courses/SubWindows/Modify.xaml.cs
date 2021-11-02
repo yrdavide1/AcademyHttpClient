@@ -76,6 +76,25 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
                 Name = "PropsList",
                 Visibility = Visibility.Hidden
             };
+            Label inputLabel = new()
+            {
+                Visibility = Visibility.Hidden,
+                Margin = new Thickness(20, 20, 0, 0),
+            };
+            TextBox input = new()
+            {
+                Width = 220,
+                HorizontalAlignment= HorizontalAlignment.Left,
+                Name = "PropInput",
+                Margin = new Thickness(20, 0, 0, 0)
+            };
+            CheckBox grInput = new()
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Content = "Grants certification?",
+                Name = "GrantsCertification",
+                Margin = new Thickness(20, 0, 0, 0)
+            };
             Button confirm = new()
             {
                 Content = "Confirm",
@@ -96,7 +115,7 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
             Container.Children.Add(coursesList);
             Container.Children.Add(propsInfo);
             Container.Children.Add(propsList);
-            Container.Children.Add(confirm);
+            Container.Children.Add(inputLabel);
 
             confirm.Loaded += (sender, e) =>
             {
@@ -116,14 +135,9 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
                 }
             };
 
-            confirm.Click += (sender, e) => 
-            {
-                //modify course prop
-            };
 
             coursesList.SelectionChanged += (sender, e) =>
             {
-                //pair.value.items.add(course props)
                 foreach(var c in controls)
                 {
                     c.Value.Visibility = Visibility.Visible;
@@ -134,6 +148,78 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
                 {
                     if (props.Name != "Id") propsList.Items.Add(props.Name);
                 }
+            };
+
+            propsList.SelectionChanged += async (sender, e) =>
+            {
+                inputLabel.Visibility = Visibility.Visible;
+                long currentId = coursesMap.FirstOrDefault(x => x.Value == coursesList.SelectedItem.ToString()).Key;
+                string currentProp = propsList.SelectedItem.ToString();
+                Course currentCourse = await GetCourseById(currentId);
+                var currentPropValue = currentCourse.GetType()
+                                                       .GetProperty(currentProp)
+                                                       .GetValue(currentCourse);
+
+                if(currentPropValue != null && currentProp.Equals("GrantsCertification"))
+                {
+                    if (Container.Children.Contains(input))
+                    {
+                        Container.Children.Remove(input);
+                        Container.Children.Remove(confirm);
+                    }
+                    Container.Children.Add(grInput);
+                    Container.Children.Add(confirm);
+                    inputLabel.Content = $"Current {currentProp} value is {currentPropValue}";
+                    inputLabel.Foreground = Brushes.Black;
+                }
+                else if(currentPropValue != null && !currentProp.Equals("GrantsCertification"))
+                {
+                    if (Container.Children.Contains(grInput))
+                    {
+                        Container.Children.Remove(grInput);
+                        Container.Children.Remove(confirm);
+                    }
+                    Container.Children.Add(input);
+                    Container.Children.Add(confirm);
+                    inputLabel.Content = $"Current {currentProp} value is {currentPropValue}";
+                    inputLabel.Foreground = Brushes.Black;
+                }
+                else
+                {
+                    inputLabel.Content = "CURRENT VALUE IS NULL";
+                    inputLabel.Foreground = Brushes.Red;
+                }
+            };
+
+            confirm.Click += async (sender, e) => 
+            {
+                long currentId = coursesMap.FirstOrDefault(x => x.Value == coursesList.SelectedItem.ToString()).Key;
+                string propToUpdate = propsList.SelectedItem.ToString();
+                Course oldCourse = await GetCourseById(currentId);
+                dynamic currentPropValue = oldCourse.GetType()
+                                       .GetProperty(propToUpdate)
+                                       .GetValue(oldCourse);
+                Course newCourse = new();
+                HttpResponseMessage response;
+
+                if (propToUpdate.Equals("GrantsCertification")) oldCourse.GrantsCertification = grInput.IsChecked;
+                else oldCourse.GetType().GetProperty(propToUpdate).SetValue(oldCourse, currentPropValue);
+
+                using HttpClient client = new();
+                response = await client.DeleteAsync($"https://localhost:44331/api/course/{currentId}");
+                response.EnsureSuccessStatusCode();
+
+                foreach(var p in oldCourse.GetType().GetProperties())
+                {
+                    if(p.Name != "Id") newCourse.GetType().GetProperty(p.Name).SetValue(newCourse, p.GetValue(oldCourse));
+                }
+
+                response = await client.PostAsJsonAsync("https://localhost:44331/api/course/", newCourse);
+                response.EnsureSuccessStatusCode();
+                newCourse = await response.Content.ReadAsAsync<Course>();
+
+                MessageBox.Show($"{propToUpdate} successfully updated, new course Id is {newCourse.Id}");
+                Close();
             };
         }
 
@@ -147,6 +233,16 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
             courses = await response.Content.ReadAsAsync<List<Course>>();
 
             return courses;
+        }
+
+        private static async Task<Course> GetCourseById(long id)
+        {
+            using HttpClient client = new();
+            HttpResponseMessage response = await client.GetAsync($"https://localhost:44331/api/course/{id}");
+            Course c = await response.Content.ReadAsAsync<Course>();
+            response.EnsureSuccessStatusCode();
+
+            return c;
         }
     }
 }

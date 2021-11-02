@@ -2,3 +2,6 @@
 
 # CS8600: Conversione del valore letterale Null o di un possibile valore Null in un tipo che non ammette i valori Null.
 dotnet_diagnostic.CS8600.severity = silent
+
+# CS8602: Dereferenziamento di un possibile riferimento Null.
+dotnet_diagnostic.CS8602.severity = silent

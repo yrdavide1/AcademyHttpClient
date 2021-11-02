@@ -75,7 +75,7 @@ namespace AcademyHttpClientGUI.SubWindows.UpdateStudent
             Student newStudent = new();
             long idToUpdate = oldStudent.Id;
             string? propToUpdate = Fields.SelectedItem.ToString();
-            HttpResponseMessage response = new();
+            HttpResponseMessage response;
 
             if (propToUpdate == "IsEmployee") oldStudent.IsEmployee = IsEmployeeCheckBox.IsChecked;
             else oldStudent.GetType().GetProperty(propToUpdate).SetValue(oldStudent, PropInput.Text);
