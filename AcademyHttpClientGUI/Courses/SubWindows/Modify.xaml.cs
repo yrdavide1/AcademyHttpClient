@@ -79,7 +79,7 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
             Label inputLabel = new()
             {
                 Visibility = Visibility.Hidden,
-                Margin = new Thickness(20, 20, 0, 0),
+                Margin = new Thickness(17, 20, 0, 0),
             };
             TextBox input = new()
             {
@@ -94,6 +94,14 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
                 Content = "Grants certification?",
                 Name = "GrantsCertification",
                 Margin = new Thickness(20, 0, 0, 0)
+            };
+            DatePicker dateInput = new()
+            {
+                Name = "CreationDate",
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(20, 0, 0, 0),
+                Width = 146,
+                SelectedDateFormat = DatePickerFormat.Short
             };
             Button confirm = new()
             {
@@ -138,10 +146,8 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
 
             coursesList.SelectionChanged += (sender, e) =>
             {
-                foreach(var c in controls)
-                {
-                    c.Value.Visibility = Visibility.Visible;
-                }
+                controls.First().Value.Visibility = Visibility.Visible;
+                controls.ElementAt(1).Value.Visibility = Visibility.Visible;
 
                 Course selectedCourse = courses.Where(x => x.Title == coursesList.SelectedItem as string).First();
                 foreach(var props in selectedCourse.GetType().GetProperties())
@@ -162,23 +168,29 @@ namespace AcademyHttpClientGUI.Courses.SubWindows
 
                 if(currentPropValue != null && currentProp.Equals("GrantsCertification"))
                 {
-                    if (Container.Children.Contains(input))
-                    {
-                        Container.Children.Remove(input);
-                        Container.Children.Remove(confirm);
-                    }
+                    Container.Children.Remove(input);
+                    Container.Children.Remove(dateInput);
+                    Container.Children.Remove(confirm);
                     Container.Children.Add(grInput);
+                    Container.Children.Add(confirm);
+                    inputLabel.Content = $"Current {currentProp} value is {currentPropValue}";
+                    inputLabel.Foreground = Brushes.Black;
+                }
+                else if(currentPropValue != null && currentProp.Equals("CreationDate"))
+                {
+                    Container.Children.Remove(input);
+                    Container.Children.Remove(grInput);
+                    Container.Children.Remove(confirm);
+                    Container.Children.Add(dateInput);
                     Container.Children.Add(confirm);
                     inputLabel.Content = $"Current {currentProp} value is {currentPropValue}";
                     inputLabel.Foreground = Brushes.Black;
                 }
                 else if(currentPropValue != null && !currentProp.Equals("GrantsCertification"))
                 {
-                    if (Container.Children.Contains(grInput))
-                    {
-                        Container.Children.Remove(grInput);
-                        Container.Children.Remove(confirm);
-                    }
+                    Container.Children.Remove(grInput);
+                    Container.Children.Remove(dateInput);
+                    Container.Children.Remove(confirm);
                     Container.Children.Add(input);
                     Container.Children.Add(confirm);
                     inputLabel.Content = $"Current {currentProp} value is {currentPropValue}";
