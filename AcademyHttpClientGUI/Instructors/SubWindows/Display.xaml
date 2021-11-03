@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AcademyHttpClientGUI.Instructors.SubWindows"
         mc:Ignorable="d"
-        Title="Display" Height="600" Width="400">
+        Title="Display" Width="400">
     <Grid>
-        <StackPanel x:Name="Container"/>
+        <StackPanel x:Name="Container">
+            <TextBlock Text="Instructor list" FontSize="15" HorizontalAlignment="Center" Margin="0, 20, 0, 0"/>
+            <ScrollViewer Margin="0, 20, 0, 0">
+                <TextBlock x:Name="DisplayBlock" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+            </ScrollViewer>
+        </StackPanel>
     </Grid>
 </Window>

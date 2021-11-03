@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +24,7 @@ namespace AcademyHttpClientGUI.Instructors.SubWindows
         public Display()
         {
             InitializeComponent();
+            Onload();
         }
 
         private static async Task<List<Instructor>> GetInstructors()
@@ -33,13 +35,37 @@ namespace AcademyHttpClientGUI.Instructors.SubWindows
             response.EnsureSuccessStatusCode();
             instructors = await response.Content.ReadAsAsync<List<Instructor>>();
 
-            if(instructors.Any()) return instructors;
-            return null;
+            return instructors;
         }
 
         private async void Onload()
         {
+            try
+            {
+                double height = 300;
+                List<Instructor> instructors = await GetInstructors();
+                int elements = instructors.Count;
+                DisplayBlock.Text = "";
 
+                foreach (Instructor i in instructors)
+                {
+                    List<PropertyInfo> props = i.GetType().GetProperties().ToList();
+
+                    foreach (PropertyInfo prop in props)
+                    {
+                        if (prop == null) DisplayBlock.Text += $"{prop.Name}: PROPERTY IS NULL\n";
+                        else DisplayBlock.Text += $"{prop.Name}: {prop.GetValue(i)}\n";
+                    }
+                    DisplayBlock.Text += "-------------";
+                    height *= elements;
+                    this.Height = height;
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Cannot retrieve instructors from DB!", ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.Loaded += (sender, e) => Close();
+            }
         }
     }
 }
